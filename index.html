@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>結婚式のご招待</title>
+  <title>結婚式のご招待 - RPG招待状</title>
   <style>
     * {
       box-sizing: border-box;
@@ -12,217 +12,410 @@
     }
 
     body {
-      font-family: "MS PGothic", "Hiragino Kaku Gothic Pro", sans-serif;
-      background: linear-gradient(45deg, #ffb3d9 0%, #ffcc99 50%, #99ccff 100%);
+      font-family: 'Courier New', monospace;
+      background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
-      image-rendering: pixelated;
-    }
-
-    .container {
-      width: min(100%, 720px);
-      background: #fff;
-      border: 8px solid #333;
-      box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.3);
-      padding: 32px;
-      position: relative;
-    }
-
-    .title {
-      text-align: center;
-      margin-bottom: 28px;
-      position: relative;
-    }
-
-    h1 {
-      font-size: 2.2rem;
-      color: #ff1493;
-      text-shadow: 4px 4px 0 #ffb3d9, -2px -2px 0 #fff;
-      letter-spacing: 2px;
-      margin-bottom: 8px;
-    }
-
-    .stars {
-      font-size: 1.8rem;
-      letter-spacing: 8px;
-      color: #ffcc00;
-      animation: twinkle 0.6s infinite;
-    }
-
-    @keyframes twinkle {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
-
-    .window {
-      background: #ffebf5;
-      border: 4px solid #ff1493;
       padding: 16px;
-      margin: 16px 0;
-      position: relative;
+      overflow-x: hidden;
     }
 
-    .window::before {
-      content: "";
-      position: absolute;
-      top: -8px;
-      left: 12px;
-      width: 24px;
-      height: 12px;
-      background: #ff1493;
-    }
-
-    .window::after {
-      content: "";
-      position: absolute;
-      top: -8px;
-      right: 12px;
-      width: 24px;
-      height: 12px;
-      background: #ff1493;
-    }
-
-    .label {
-      font-weight: bold;
-      color: #ff1493;
-      font-size: 0.9rem;
-      margin-bottom: 4px;
-    }
-
-    .text {
-      font-size: 1rem;
-      color: #333;
-      line-height: 1.6;
-      margin: 8px 0;
-    }
-
-    .info-row {
+    /* タイトル画面 */
+    #titleScreen {
+      width: min(100%, 680px);
+      min-height: 60vh;
+      background: #000;
+      border: 8px solid #fff;
+      padding: 40px;
+      text-align: center;
       display: flex;
-      justify-content: space-between;
-      margin: 12px 0;
-      font-size: 0.95rem;
-      color: #333;
-    }
-
-    .couple {
-      display: flex;
-      gap: 32px;
+      flex-direction: column;
       justify-content: center;
-      margin: 16px 0;
-      font-size: 0.9rem;
+      animation: titleFadeIn 0.8s ease-out;
     }
 
-    .couple-item {
-      text-align: center;
+    @keyframes titleFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
-    .couple-item .emoji {
-      font-size: 2.4rem;
-      margin: 8px 0;
+    .title-logo {
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      color: #00ff00;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px #00ff00;
+      animation: textGlow 1.5s infinite;
+      letter-spacing: 2px;
     }
 
-    .rsvp {
-      text-align: center;
-      margin-top: 28px;
+    @keyframes textGlow {
+      0%, 100% { text-shadow: 0 0 10px #00ff00; }
+      50% { text-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00; }
     }
 
-    .rsvp button {
-      background: linear-gradient(to bottom, #ffcc00, #ff9900);
-      border: 4px solid #333;
-      color: #333;
-      padding: 12px 28px;
+    .title-subtitle {
+      color: #00ff00;
+      font-size: clamp(0.9rem, 2vw, 1.2rem);
+      margin: 20px 0;
+      line-height: 1.8;
+      letter-spacing: 1px;
+      opacity: 0;
+      animation: slideInUp 1s ease-out 0.5s forwards;
+    }
+
+    @keyframes slideInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .start-button {
+      margin-top: 40px;
+      animation: buttonBounce 2s infinite;
+    }
+
+    @keyframes buttonBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .start-btn {
+      background: #00ff00;
+      color: #000;
+      border: 4px solid #00ff00;
+      padding: 12px 24px;
       font-size: 1rem;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.2);
-      transition: all 0.1s;
-      font-family: "MS PGothic", sans-serif;
+      font-family: 'Courier New', monospace;
       letter-spacing: 1px;
+      box-shadow: 0 0 10px #00ff00;
+      transition: all 0.1s;
     }
 
-    .rsvp button:hover {
+    .start-btn:hover {
       transform: translate(-2px, -2px);
-      box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.2);
+      box-shadow: 0 0 20px #00ff00;
     }
 
-    .rsvp button:active {
+    .start-btn:active {
       transform: translate(2px, 2px);
-      box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+      box-shadow: 0 0 5px #00ff00;
     }
 
-    .thanks {
-      margin-top: 16px;
-      font-size: 0.9rem;
-      color: #ff1493;
+    /* 本編画面 */
+    #mainContent {
+      width: min(100%, 680px);
+      display: none;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .scene {
+      background: #1a1a2e;
+      border: 8px solid #00ff00;
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
+      animation: windowAppear 0.5s ease-out;
+    }
+
+    @keyframes windowAppear {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .scene-title {
+      color: #ffff00;
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+      text-shadow: 0 0 5px #ffff00;
+      border-bottom: 2px solid #00ff00;
+      padding-bottom: 8px;
+    }
+
+    .scene-text {
+      color: #00ff00;
+      line-height: 1.8;
+      font-size: clamp(0.9rem, 2vw, 1rem);
+      letter-spacing: 0.5px;
+    }
+
+    .character-name {
+      color: #00ffff;
       font-weight: bold;
-      opacity: 0;
-      transition: opacity 0.3s;
+      margin-bottom: 8px;
+    }
+
+    .couple-intro {
+      display: flex;
+      gap: 20px;
+      justify-content: space-around;
+      margin: 16px 0;
+      flex-wrap: wrap;
+    }
+
+    .couple-card {
+      background: #0f0f23;
+      border: 3px solid #00ff00;
+      padding: 12px;
+      text-align: center;
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .couple-emoji {
+      font-size: 2rem;
+      margin: 8px 0;
+    }
+
+    .couple-name {
+      color: #ffff00;
+      font-weight: bold;
+      margin: 4px 0;
+    }
+
+    .couple-kana {
+      color: #00ffff;
+      font-size: 0.85rem;
+    }
+
+    .info-grid {
+      display: grid;
+      gap: 10px;
+      margin: 12px 0;
+    }
+
+    .info-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .info-label {
+      color: #ffff00;
+      font-weight: bold;
+      min-width: 60px;
+    }
+
+    .info-value {
+      color: #00ff00;
+    }
+
+    .divider {
+      height: 2px;
+      background: linear-gradient(to right, transparent, #00ff00, transparent);
+      margin: 16px 0;
+    }
+
+    .buttons-container {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+
+    .action-btn {
+      background: #00ff00;
+      color: #000;
+      border: 3px solid #00ff00;
+      padding: 10px 20px;
+      font-size: 0.95rem;
+      font-weight: bold;
+      cursor: pointer;
+      font-family: 'Courier New', monospace;
+      letter-spacing: 0.5px;
+      transition: all 0.1s;
+    }
+
+    .action-btn:hover {
+      transform: translate(-2px, -2px);
+      box-shadow: 0 0 15px #00ff00;
+    }
+
+    .action-btn:active {
+      transform: translate(2px, 2px);
+    }
+
+    .action-btn.secondary {
+      background: #00ffff;
+      border-color: #00ffff;
+      color: #000;
+    }
+
+    .action-btn.secondary:hover {
+      box-shadow: 0 0 15px #00ffff;
+    }
+
+    .blink {
+      animation: blink 0.7s infinite;
+    }
+
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding: 12px;
+      }
+
+      #titleScreen, #mainContent {
+        width: 100%;
+      }
+
+      #titleScreen {
+        padding: 24px;
+        min-height: 50vh;
+      }
+
+      .title-logo {
+        font-size: 1.5rem;
+      }
+
+      .scene {
+        padding: 16px;
+        border-width: 4px;
+      }
+
+      .buttons-container {
+        gap: 8px;
+      }
+
+      .action-btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="title">
-      <h1>結婚式のご招待</h1>
-      <div class="stars">✦ ✦ ✦</div>
+  <!-- タイトル画面 -->
+  <div id="titleScreen">
+    <div class="title-logo">◆ 結婚式招待状 ◆</div>
+    <div class="title-subtitle">
+      新郎と新婦からの
+      <br>特別な招待が届いた！
+      <br><br>
+      <span class="blink">▶ START ◀</span>
     </div>
+    <div class="start-button">
+      <button class="start-btn" onclick="startGame()">PRESS START BUTTON</button>
+    </div>
+  </div>
 
-    <div class="window">
-      <div class="label">新郎新婦</div>
-      <div class="couple">
-        <div class="couple-item">
-          <div class="emoji">👰</div>
-          <p>新婦: 池江彩花</p>
-          <p style="font-size: 0.85rem;">(いけえ さやか)</p>
+  <!-- 本編 -->
+  <div id="mainContent">
+    <!-- シーン1: 新郎新婦紹介 -->
+    <div class="scene">
+      <div class="scene-title">▶ ふたりについて</div>
+      <div class="scene-text">
+        <div style="margin-bottom: 12px;">二人の結婚をお祝いいただきありがとうございます。</div>
+        <div class="couple-intro">
+          <div class="couple-card">
+            <div class="couple-emoji">👰</div>
+            <div class="couple-name">池江彩花</div>
+            <div class="couple-kana">いけえ さやか</div>
+            <div style="color: #00ff00; font-size: 0.8rem; margin-top: 4px;">新婦</div>
+          </div>
+          <div class="couple-card">
+            <div class="couple-emoji">🤵</div>
+            <div class="couple-name">原智也</div>
+            <div class="couple-kana">はら ともや</div>
+            <div style="color: #00ff00; font-size: 0.8rem; margin-top: 4px;">新郎</div>
+          </div>
         </div>
-        <div class="couple-item">
-          <div class="emoji">🤵</div>
-          <p>新郎: 原智也</p>
-          <p style="font-size: 0.85rem;">(はら ともや)</p>
+        <div style="margin-top: 12px; line-height: 1.9;">
+          ふたりはこれまでの感謝を込めて、日々支えてくださった皆さまをお招きし、結婚式を執り行います。
+          <br><br>
+          あたたかい笑顔とともに、幸せなひとときを分かち合えたら嬉しいです。
         </div>
       </div>
     </div>
 
-    <div class="window">
-      <div class="label">開式情報</div>
-      <div class="info-row">
-        <span>日付</span>
-        <span>2026年11月2日（月）</span>
-      </div>
-      <div class="info-row">
-        <span>時間</span>
-        <span>開場 14:00 / 開始 15:00</span>
-      </div>
-      <div class="info-row">
-        <span>会場</span>
-        <span>広島 宮島</span>
-      </div>
-      <div class="info-row">
-        <span>住所</span>
-        <span>広島県廿日市市宮島町</span>
+    <div class="divider"></div>
+
+    <!-- シーン2: 式情報 -->
+    <div class="scene">
+      <div class="scene-title">▶ 式情報</div>
+      <div class="scene-text">
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-label">日付</div>
+            <div class="info-value">2026年11月2日（月）</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">時間</div>
+            <div class="info-value">開場 14:00 / 開式 15:00</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">会場</div>
+            <div class="info-value">広島県 宮島</div>
+          </div>
+          <div class="info-item">
+            <div class="info-label">住所</div>
+            <div class="info-value">広島県廿日市市宮島町</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="window">
-      <div class="text">ふたりはこれまでの感謝を込めて、日々支えてくださった皆さまをお招きし、結婚式を執り行います。あたたかい笑顔とともに、幸せなひとときを分かち合えたら嬉しいです。</div>
-    </div>
+    <div class="divider"></div>
 
-    <div class="rsvp">
-      <button id="rsvpBtn" type="button">出欠を返信する</button>
-      <p class="thanks" id="thanksText">出欠の返信ありがとうございます！</p>
+    <!-- シーン3: 返信 -->
+    <div class="scene">
+      <div class="scene-title">▶ ご返信</div>
+      <div class="scene-text">
+        <div style="margin-bottom: 12px;">
+          お手数ですが、下記のボタンより
+          <br>ご出欠をお知らせください。
+        </div>
+        <div style="color: #00ffff; font-size: 0.9rem; margin: 12px 0;">
+          ★ Googleフォームで返信 ★
+        </div>
+      </div>
+      <div class="buttons-container">
+        <button class="action-btn" onclick="openRSVP()">出欠を返信</button>
+        <button class="action-btn secondary" onclick="backToTitle()">タイトルに戻る</button>
+      </div>
     </div>
   </div>
 
   <script>
-    document.getElementById("rsvpBtn").addEventListener("click", function () {
-      const thanks = document.getElementById("thanksText");
-      thanks.style.opacity = "1";
-      this.textContent = "返信済み";
-      this.disabled = true;
-    });
+    function startGame() {
+      const titleScreen = document.getElementById('titleScreen');
+      const mainContent = document.getElementById('mainContent');
+      
+      titleScreen.style.display = 'none';
+      mainContent.style.display = 'block';
+      
+      // スクロール位置をリセット
+      window.scrollTo(0, 0);
+    }
+
+    function backToTitle() {
+      const titleScreen = document.getElementById('titleScreen');
+      const mainContent = document.getElementById('mainContent');
+      
+      mainContent.style.display = 'none';
+      titleScreen.style.display = 'flex';
+      
+      // スクロール位置をリセット
+      window.scrollTo(0, 0);
+    }
+
+    function openRSVP() {
+      // Googleフォームの仮のURL（実際のURLに置き換える）
+      const googleFormURL = 'https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform';
+      window.open(googleFormURL, '_blank');
+    }
   </script>
 </body>
 </html>
