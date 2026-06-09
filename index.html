@@ -2,239 +2,273 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Tomoya &amp; Sayaka Wedding</title>
-  <link rel="stylesheet" href="css/style.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TOMOYA &amp; SAYAKA WEDDING 2026</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- ========== オープニング画面 ========== -->
-  <div id="opening-screen">
-    <div class="opening-bg">
-      <canvas id="opening-stars"></canvas>
-    </div>
-    <div class="opening-content">
-      <div class="pixel-border opening-box">
-        <div class="sparkle-container" id="sparkles"></div>
-        <p class="opening-subtitle">- Special Invitation -</p>
-        <p class="opening-text" id="opening-text"></p>
-        <div class="opening-cursor" id="opening-cursor">▮</div>
-        <button class="rpg-btn open-btn" id="open-btn" style="display:none;">
-          <span>▶ 招待状をひらく</span>
-        </button>
+  <!-- ===== Opening Overlay ===== -->
+  <div id="opening-overlay">
+    <div class="opening-inner">
+      <canvas id="envelope-canvas" width="160" height="120"></canvas>
+      <div id="opening-message-box" class="rpg-message-box opening-msg-box">
+        <span id="opening-text"></span><span class="rpg-cursor blink">▌</span>
       </div>
+      <button id="open-btn" class="rpg-button hidden" onclick="openInvitation()">
+        ▶&nbsp;開封する
+      </button>
     </div>
   </div>
 
-  <!-- ========== メインコンテンツ ========== -->
-  <div id="main-content" style="display:none;">
+  <!-- ===== Main Content ===== -->
+  <main id="main-content" class="hidden">
 
-    <!-- ヒーローセクション：宮島 -->
-    <section id="hero" class="parallax-section">
-      <canvas id="world-canvas"></canvas>
-      <div class="hero-overlay">
-        <div class="hero-title-box pixel-border">
-          <p class="hero-subtitle pixel-text">Wedding Invitation</p>
-          <h1 class="hero-title pixel-text">Tomoya <span class="amp">&amp;</span> Sayaka</h1>
-          <p class="hero-date pixel-text">2026.11.02</p>
+    <!-- Section 1: Title Screen -->
+    <section id="title-section">
+      <canvas id="title-canvas"></canvas>
+      <div class="title-overlay">
+        <div class="title-text-block">
+          <p class="title-sub">- WEDDING INVITATION -</p>
+          <h1 class="title-main">TOMOYA<br><span class="title-amp">&amp;</span><br>SAYAKA</h1>
+          <p class="title-date">2026 . 11 . 02</p>
         </div>
-      </div>
-      <div class="scroll-hint">
-        <span class="pixel-text blink-text">▼ SCROLL ▼</span>
+        <div class="scroll-hint blink-slow">▼ SCROLL DOWN ▼</div>
       </div>
     </section>
 
-    <!-- キャラクタープロフィール -->
-    <section id="profiles" class="rpg-section">
-      <div class="section-header pixel-border">
-        <h2 class="pixel-text section-title">- Party Members -</h2>
-      </div>
-      <div class="profiles-container">
-
-        <!-- 新郎 -->
-        <div class="profile-card pixel-border slide-in-left">
-          <div class="character-sprite-wrap">
-            <canvas id="groom-sprite" width="80" height="120" class="character-canvas"></canvas>
-            <div class="sprite-shadow"></div>
+    <!-- Section 2: Story / Message -->
+    <section id="story-section">
+      <div class="pixel-grid-bg"></div>
+      <div class="story-inner">
+        <canvas id="story-canvas" width="400" height="160"></canvas>
+        <div class="story-messages">
+          <div class="rpg-message-box story-box scroll-reveal" data-delay="0">
+            <div class="message-face">💬</div>
+            <p id="story-text-1" class="story-text"></p>
+            <span class="rpg-cursor blink hidden" id="cur1">▌</span>
           </div>
-          <div class="profile-info">
-            <div class="profile-name-row">
-              <span class="pixel-text profile-name">Tomoya</span>
-              <span class="pixel-text profile-kana">はら ともや</span>
-            </div>
-            <table class="rpg-stats">
-              <tr><td class="stat-label">NAME</td><td class="stat-val">原 智也</td></tr>
-              <tr><td class="stat-label">LEVEL</td><td class="stat-val" id="groom-level">--</td></tr>
-              <tr><td class="stat-label">FROM</td><td class="stat-val">広島県</td></tr>
-              <tr><td class="stat-label">CLASS</td><td class="stat-val">新郎</td></tr>
-            </table>
-            <div class="rpg-bar-wrap">
-              <span class="pixel-text bar-label">HP</span>
-              <div class="rpg-bar"><div class="rpg-bar-fill hp-fill"></div></div>
-            </div>
-            <div class="rpg-bar-wrap">
-              <span class="pixel-text bar-label">MP</span>
-              <div class="rpg-bar"><div class="rpg-bar-fill mp-fill"></div></div>
-            </div>
+          <div class="rpg-message-box story-box scroll-reveal" data-delay="200">
+            <div class="message-face">💬</div>
+            <p id="story-text-2" class="story-text"></p>
+            <span class="rpg-cursor blink hidden" id="cur2">▌</span>
           </div>
-        </div>
-
-        <!-- VS -->
-        <div class="vs-badge pixel-text">VS<br><span class="vs-sub">→LOVE←</span></div>
-
-        <!-- 新婦 -->
-        <div class="profile-card pixel-border slide-in-right">
-          <div class="character-sprite-wrap">
-            <canvas id="bride-sprite" width="80" height="120" class="character-canvas"></canvas>
-            <div class="sprite-shadow"></div>
-          </div>
-          <div class="profile-info">
-            <div class="profile-name-row">
-              <span class="pixel-text profile-name">Sayaka</span>
-              <span class="pixel-text profile-kana">いけえ さやか</span>
-            </div>
-            <table class="rpg-stats">
-              <tr><td class="stat-label">NAME</td><td class="stat-val">池江 彩花</td></tr>
-              <tr><td class="stat-label">LEVEL</td><td class="stat-val" id="bride-level">--</td></tr>
-              <tr><td class="stat-label">FROM</td><td class="stat-val">鹿児島県</td></tr>
-              <tr><td class="stat-label">CLASS</td><td class="stat-val">新婦</td></tr>
-            </table>
-            <div class="rpg-bar-wrap">
-              <span class="pixel-text bar-label">HP</span>
-              <div class="rpg-bar"><div class="rpg-bar-fill hp-fill hp-fill2"></div></div>
-            </div>
-            <div class="rpg-bar-wrap">
-              <span class="pixel-text bar-label">MP</span>
-              <div class="rpg-bar"><div class="rpg-bar-fill mp-fill mp-fill2"></div></div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- メインメッセージ -->
-    <section id="message" class="rpg-section message-section">
-      <div class="message-window pixel-border">
-        <div class="message-window-header pixel-text">
-          <span>★ Event Message ★</span>
-        </div>
-        <div class="message-body" id="message-body">
-          <p id="message-text" class="pixel-text message-text"></p>
-          <span class="msg-cursor blink-text" id="msg-cursor" style="display:none;">▮</span>
         </div>
       </div>
     </section>
 
-    <!-- 鳥居 大型表示 -->
-    <section id="torii-section" class="parallax-section torii-section">
-      <canvas id="torii-canvas"></canvas>
-      <div class="torii-overlay">
-        <div class="torii-text-box pixel-border">
-          <p class="pixel-text torii-caption">厳島神社 大鳥居</p>
-          <p class="pixel-text torii-sub">Itsukushima Shrine</p>
-        </div>
-      </div>
-    </section>
+    <!-- Section 3: Character Profiles -->
+    <section id="characters-section">
+      <h2 class="section-title scroll-reveal">- PARTY MEMBERS -</h2>
+      <div class="characters-grid">
 
-    <!-- 結婚式情報 -->
-    <section id="wedding-info" class="rpg-section">
-      <div class="section-header pixel-border">
-        <h2 class="pixel-text section-title">- Quest Details -</h2>
-      </div>
-      <div class="info-cards">
-
-        <div class="info-card pixel-border fade-in-card">
-          <div class="info-icon pixel-text">📅</div>
-          <div class="info-label pixel-text">DATE &amp; TIME</div>
-          <div class="info-content">
-            <p class="pixel-text info-main">2026年11月2日（月）</p>
-            <table class="info-table pixel-text">
-              <tr><td>開場</td><td>13:00</td></tr>
-              <tr><td>開始</td><td>14:00</td></tr>
-            </table>
+        <!-- Tomoya -->
+        <div class="rpg-status-window scroll-reveal" data-delay="0">
+          <div class="status-header">
+            <span class="status-icon">♥</span> 新郎
+          </div>
+          <div class="status-body">
+            <div class="sprite-area">
+              <canvas id="tomoya-canvas" width="128" height="176"></canvas>
+            </div>
+            <div class="status-info">
+              <div class="status-row">
+                <span class="label">NAME</span>
+                <span class="value kana">はら ともや</span>
+              </div>
+              <div class="status-row">
+                <span class="label">LEVEL</span>
+                <span class="value" id="tomoya-level">??</span>
+              </div>
+              <div class="status-bar-row">
+                <span class="label">HP</span>
+                <div class="stat-bar-wrap">
+                  <div class="stat-bar" data-value="100">
+                    <div class="stat-bar-fill hp-fill" style="width:0%"></div>
+                  </div>
+                  <span class="stat-val">210/210</span>
+                </div>
+              </div>
+              <div class="status-bar-row">
+                <span class="label">MP</span>
+                <div class="stat-bar-wrap">
+                  <div class="stat-bar" data-value="100">
+                    <div class="stat-bar-fill mp-fill" style="width:0%"></div>
+                  </div>
+                  <span class="stat-val">80/80</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="status-footer">
+            <div class="status-row2"><span class="label">CLASS</span><span class="value">広島の勇者</span></div>
+            <div class="status-row2"><span class="label">HOME</span><span class="value">広島県</span></div>
+            <div class="status-row2"><span class="label">BIRTHDAY</span><span class="value">2000.03.12</span></div>
+            <div class="status-row2"><span class="label">FAV.FOOD</span><span class="value">さやかの手料理</span></div>
           </div>
         </div>
 
-        <div class="info-card pixel-border fade-in-card">
-          <div class="info-icon pixel-text">🗺️</div>
-          <div class="info-label pixel-text">LOCATION</div>
-          <div class="info-content">
-            <p class="pixel-text info-main">広島・宮島 本土</p>
-            <a href="MAP_LINK_HERE" target="_blank" class="rpg-btn map-btn pixel-text" id="map-btn">
-              <span>▶ MAPを開く</span>
+        <!-- Sayaka -->
+        <div class="rpg-status-window scroll-reveal" data-delay="150">
+          <div class="status-header">
+            <span class="status-icon">♥</span> 新婦
+          </div>
+          <div class="status-body">
+            <div class="sprite-area">
+              <canvas id="sayaka-canvas" width="128" height="176"></canvas>
+            </div>
+            <div class="status-info">
+              <div class="status-row">
+                <span class="label">NAME</span>
+                <span class="value kana">いけえ さやか</span>
+              </div>
+              <div class="status-row">
+                <span class="label">LEVEL</span>
+                <span class="value" id="sayaka-level">??</span>
+              </div>
+              <div class="status-bar-row">
+                <span class="label">HP</span>
+                <div class="stat-bar-wrap">
+                  <div class="stat-bar" data-value="100">
+                    <div class="stat-bar-fill hp-fill" style="width:0%"></div>
+                  </div>
+                  <span class="stat-val">190/190</span>
+                </div>
+              </div>
+              <div class="status-bar-row">
+                <span class="label">MP</span>
+                <div class="stat-bar-wrap">
+                  <div class="stat-bar" data-value="100">
+                    <div class="stat-bar-fill mp-fill" style="width:0%"></div>
+                  </div>
+                  <span class="stat-val">100/100</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="status-footer">
+            <div class="status-row2"><span class="label">CLASS</span><span class="value">鹿児島の魔法使い</span></div>
+            <div class="status-row2"><span class="label">HOME</span><span class="value">鹿児島県</span></div>
+            <div class="status-row2"><span class="label">BIRTHDAY</span><span class="value">1998.09.19</span></div>
+            <div class="status-row2"><span class="label">FAV.FOOD</span><span class="value">牡蠣</span></div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Section 4: Wedding Information -->
+    <section id="info-section">
+      <h2 class="section-title scroll-reveal">- QUEST DETAILS -</h2>
+      <div class="info-grid">
+
+        <!-- Date/Time -->
+        <div class="rpg-info-window scroll-reveal" data-delay="0">
+          <div class="info-window-title">── QUEST DATE ──</div>
+          <div class="info-window-body">
+            <div class="info-big">2026年 11月 2日</div>
+            <div class="info-sub">月曜日</div>
+            <div class="info-row"><span class="info-label">OPEN</span><span class="info-val">13:00</span></div>
+            <div class="info-row"><span class="info-label">START</span><span class="info-val">14:00</span></div>
+          </div>
+        </div>
+
+        <!-- Location -->
+        <div class="rpg-info-window scroll-reveal" data-delay="100">
+          <div class="info-window-title">── LOCATION ──</div>
+          <div class="info-window-body">
+            <div class="info-big">広島・宮島本土</div>
+            <div class="info-sub">廿日市市</div>
+            <a href="YOUR_GOOGLE_MAP_URL" target="_blank" class="rpg-button map-btn" rel="noopener noreferrer">
+              ▶ MAP を開く
             </a>
           </div>
         </div>
 
+        <!-- Countdown -->
+        <div class="rpg-info-window countdown-window scroll-reveal" data-delay="200">
+          <div class="info-window-title">── NEXT EVENT ──</div>
+          <div class="info-window-body">
+            <div class="countdown-star">★ Wedding Day ★</div>
+            <div class="countdown-display">
+              <div class="countdown-unit">
+                <span id="cd-days" class="cd-num">---</span>
+                <span class="cd-label">日</span>
+              </div>
+              <div class="countdown-unit">
+                <span id="cd-hours" class="cd-num">--</span>
+                <span class="cd-label">時間</span>
+              </div>
+              <div class="countdown-unit">
+                <span id="cd-mins" class="cd-num">--</span>
+                <span class="cd-label">分</span>
+              </div>
+              <div class="countdown-unit">
+                <span id="cd-secs" class="cd-num">--</span>
+                <span class="cd-label">秒</span>
+              </div>
+            </div>
+            <div class="countdown-progress-wrap">
+              <div class="countdown-progress-bar">
+                <div id="cd-progress" class="countdown-progress-fill"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </section>
 
-    <!-- カウントダウン -->
-    <section id="countdown" class="rpg-section countdown-section">
-      <div class="section-header pixel-border">
-        <h2 class="pixel-text section-title">- Quest Start Until -</h2>
-        <p class="pixel-text countdown-subtitle">Wedding Quest Start まで</p>
-      </div>
-      <div class="countdown-display pixel-border">
-        <div class="countdown-grid">
-          <div class="countdown-item">
-            <div class="countdown-num pixel-text" id="cd-days">---</div>
-            <div class="countdown-label pixel-text">日</div>
+    <!-- Section 5: RSVP -->
+    <section id="rsvp-section">
+      <div class="rsvp-inner scroll-reveal">
+        <div class="rpg-message-box rsvp-box">
+          <div class="rsvp-title">── QUEST: 出欠確認 ──</div>
+          <p class="rsvp-msg">新たな冒険に<br>参加しますか？</p>
+          <div class="rsvp-buttons">
+            <a href="YOUR_GOOGLE_FORM_URL" target="_blank" class="rpg-button rsvp-yes" rel="noopener noreferrer">
+              ▶ 出欠を回答する
+            </a>
+            <button class="rpg-button rsvp-no" onclick="showMaybe()">
+              　後で決める
+            </button>
           </div>
-          <div class="countdown-sep pixel-text">:</div>
-          <div class="countdown-item">
-            <div class="countdown-num pixel-text" id="cd-hours">--</div>
-            <div class="countdown-label pixel-text">時間</div>
-          </div>
-          <div class="countdown-sep pixel-text">:</div>
-          <div class="countdown-item">
-            <div class="countdown-num pixel-text" id="cd-mins">--</div>
-            <div class="countdown-label pixel-text">分</div>
-          </div>
-          <div class="countdown-sep pixel-text">:</div>
-          <div class="countdown-item">
-            <div class="countdown-num pixel-text" id="cd-secs">--</div>
-            <div class="countdown-label pixel-text">秒</div>
-          </div>
+          <p id="rsvp-maybe-msg" class="rsvp-maybe hidden">
+            …それでも、いつか一緒に冒険しましょう！
+          </p>
         </div>
       </div>
     </section>
 
-    <!-- 出欠確認 -->
-    <section id="rsvp" class="rpg-section rsvp-section">
-      <div class="section-header pixel-border">
-        <h2 class="pixel-text section-title">- Join the Quest? -</h2>
-      </div>
-      <div class="rsvp-box pixel-border">
-        <p class="pixel-text rsvp-text">
-          二人の新たな冒険を<br>一緒に見届けてください。
-        </p>
-        <a href="GOOGLE_FORM_URL_HERE" target="_blank" class="rpg-btn rsvp-btn">
-          <span class="pixel-text">▶ 出欠を回答する</span>
-        </a>
-      </div>
-    </section>
-
-    <!-- フッター -->
-    <footer id="footer" class="pixel-text">
-      <p>Tomoya &amp; Sayaka &copy; 2026</p>
-      <p class="footer-sub">Made with ♥ in Miyajima</p>
+    <!-- Footer -->
+    <footer>
+      <p class="footer-text">TOMOYA &amp; SAYAKA</p>
+      <p class="footer-sub">WEDDING 2026.11.02</p>
+      <p class="footer-credit">Made with ♥ in Hiroshima</p>
     </footer>
 
-  </div><!-- /#main-content -->
+  </main>
 
-  <!-- ========== イースターエッグ：ユキ ========== -->
-  <div id="yuki-container" class="yuki-hidden">
-    <canvas id="yuki-canvas" width="96" height="80"></canvas>
-    <div class="yuki-bubble pixel-text pixel-border" id="yuki-bubble" style="display:none;">
-      ワン！
+  <!-- ===== Easter Egg Overlay ===== -->
+  <div id="easter-egg-overlay" class="hidden">
+    <div class="easter-egg-inner">
+      <div class="rpg-message-box easter-msg-box">
+        <p class="easter-exclaim">！</p>
+        <p id="easter-text"></p>
+        <span class="rpg-cursor blink">▌</span>
+      </div>
+      <canvas id="yuki-canvas" width="192" height="192"></canvas>
+      <div class="rpg-message-box yuki-info-box">
+        <p class="yuki-name">ユキ</p>
+        <p class="yuki-desc">新婦のご実家の<br>白い柴犬</p>
+      </div>
+      <button class="rpg-button" onclick="closeEasterEgg()">▶ 閉じる</button>
     </div>
   </div>
 
-  <!-- ========== 隠しクリックゾーン ========== -->
-  <div id="easter-egg-zone"></div>
-
-  <script src="js/main.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
