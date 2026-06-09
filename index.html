@@ -1,421 +1,369 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>結婚式のご招待 - RPG招待状</title>
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Courier New', monospace;
-      background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      overflow-x: hidden;
-    }
-
-    /* タイトル画面 */
-    #titleScreen {
-      width: min(100%, 680px);
-      min-height: 60vh;
-      background: #000;
-      border: 8px solid #fff;
-      padding: 40px;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      animation: titleFadeIn 0.8s ease-out;
-    }
-
-    @keyframes titleFadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .title-logo {
-      font-size: clamp(1.8rem, 5vw, 2.8rem);
-      color: #00ff00;
-      margin-bottom: 20px;
-      text-shadow: 0 0 10px #00ff00;
-      animation: textGlow 1.5s infinite;
-      letter-spacing: 2px;
-    }
-
-    @keyframes textGlow {
-      0%, 100% { text-shadow: 0 0 10px #00ff00; }
-      50% { text-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00; }
-    }
-
-    .title-subtitle {
-      color: #00ff00;
-      font-size: clamp(0.9rem, 2vw, 1.2rem);
-      margin: 20px 0;
-      line-height: 1.8;
-      letter-spacing: 1px;
-      opacity: 0;
-      animation: slideInUp 1s ease-out 0.5s forwards;
-    }
-
-    @keyframes slideInUp {
-      from { opacity: 0; transform: translateY(20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .start-button {
-      margin-top: 40px;
-      animation: buttonBounce 2s infinite;
-    }
-
-    @keyframes buttonBounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
-    }
-
-    .start-btn {
-      background: #00ff00;
-      color: #000;
-      border: 4px solid #00ff00;
-      padding: 12px 24px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      font-family: 'Courier New', monospace;
-      letter-spacing: 1px;
-      box-shadow: 0 0 10px #00ff00;
-      transition: all 0.1s;
-    }
-
-    .start-btn:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 0 0 20px #00ff00;
-    }
-
-    .start-btn:active {
-      transform: translate(2px, 2px);
-      box-shadow: 0 0 5px #00ff00;
-    }
-
-    /* 本編画面 */
-    #mainContent {
-      width: min(100%, 680px);
-      display: none;
-      animation: fadeIn 0.5s ease-out;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-
-    .scene {
-      background: #1a1a2e;
-      border: 8px solid #00ff00;
-      padding: 24px;
-      margin-bottom: 20px;
-      box-shadow: 0 0 15px rgba(0, 255, 0, 0.3);
-      animation: windowAppear 0.5s ease-out;
-    }
-
-    @keyframes windowAppear {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .scene-title {
-      color: #ffff00;
-      font-size: 1.2rem;
-      margin-bottom: 12px;
-      text-shadow: 0 0 5px #ffff00;
-      border-bottom: 2px solid #00ff00;
-      padding-bottom: 8px;
-    }
-
-    .scene-text {
-      color: #00ff00;
-      line-height: 1.8;
-      font-size: clamp(0.9rem, 2vw, 1rem);
-      letter-spacing: 0.5px;
-    }
-
-    .character-name {
-      color: #00ffff;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-
-    .couple-intro {
-      display: flex;
-      gap: 20px;
-      justify-content: space-around;
-      margin: 16px 0;
-      flex-wrap: wrap;
-    }
-
-    .couple-card {
-      background: #0f0f23;
-      border: 3px solid #00ff00;
-      padding: 12px;
-      text-align: center;
-      flex: 1;
-      min-width: 140px;
-    }
-
-    .couple-emoji {
-      font-size: 2rem;
-      margin: 8px 0;
-    }
-
-    .couple-name {
-      color: #ffff00;
-      font-weight: bold;
-      margin: 4px 0;
-    }
-
-    .couple-kana {
-      color: #00ffff;
-      font-size: 0.85rem;
-    }
-
-    .info-grid {
-      display: grid;
-      gap: 10px;
-      margin: 12px 0;
-    }
-
-    .info-item {
-      display: flex;
-      gap: 10px;
-      align-items: flex-start;
-    }
-
-    .info-label {
-      color: #ffff00;
-      font-weight: bold;
-      min-width: 60px;
-    }
-
-    .info-value {
-      color: #00ff00;
-    }
-
-    .divider {
-      height: 2px;
-      background: linear-gradient(to right, transparent, #00ff00, transparent);
-      margin: 16px 0;
-    }
-
-    .buttons-container {
-      display: flex;
-      gap: 12px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 24px;
-    }
-
-    .action-btn {
-      background: #00ff00;
-      color: #000;
-      border: 3px solid #00ff00;
-      padding: 10px 20px;
-      font-size: 0.95rem;
-      font-weight: bold;
-      cursor: pointer;
-      font-family: 'Courier New', monospace;
-      letter-spacing: 0.5px;
-      transition: all 0.1s;
-    }
-
-    .action-btn:hover {
-      transform: translate(-2px, -2px);
-      box-shadow: 0 0 15px #00ff00;
-    }
-
-    .action-btn:active {
-      transform: translate(2px, 2px);
-    }
-
-    .action-btn.secondary {
-      background: #00ffff;
-      border-color: #00ffff;
-      color: #000;
-    }
-
-    .action-btn.secondary:hover {
-      box-shadow: 0 0 15px #00ffff;
-    }
-
-    .blink {
-      animation: blink 0.7s infinite;
-    }
-
-    @keyframes blink {
-      0%, 49% { opacity: 1; }
-      50%, 100% { opacity: 0; }
-    }
-
-    @media (max-width: 640px) {
-      body {
-        padding: 12px;
-      }
-
-      #titleScreen, #mainContent {
-        width: 100%;
-      }
-
-      #titleScreen {
-        padding: 24px;
-        min-height: 50vh;
-      }
-
-      .title-logo {
-        font-size: 1.5rem;
-      }
-
-      .scene {
-        padding: 16px;
-        border-width: 4px;
-      }
-
-      .buttons-container {
-        gap: 8px;
-      }
-
-      .action-btn {
-        padding: 8px 16px;
-        font-size: 0.9rem;
-      }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tomoya &amp; Sayaka Wedding Invitation</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- タイトル画面 -->
-  <div id="titleScreen">
-    <div class="title-logo">◆ 結婚式招待状 ◆</div>
-    <div class="title-subtitle">
-      新郎と新婦からの
-      <br>特別な招待が届いた！
-      <br><br>
-      <span class="blink">▶ START ◀</span>
-    </div>
-    <div class="start-button">
-      <button class="start-btn" onclick="startGame()">PRESS START BUTTON</button>
+
+  <!-- ================================================
+       オープニング画面
+       ================================================ -->
+  <div id="opening-screen">
+    <div class="sparkles-container" id="sparkles"></div>
+    <div class="opening-content">
+      <div class="envelope-wrap">
+        <div class="envelope" id="envelope">
+          <div class="envelope-body">
+            <div class="envelope-flap"></div>
+            <div class="envelope-seal">✉</div>
+          </div>
+        </div>
+      </div>
+      <p class="opening-badge">📨</p>
+      <h2 class="opening-subtitle">結婚式の招待状が届きました！</h2>
+      <h1 class="opening-title">Tomoya &amp; Sayaka<br>Wedding Invitation</h1>
+      <button class="rpg-button" id="open-button">
+        <span class="btn-cursor">▶</span>招待状をひらく
+      </button>
     </div>
   </div>
 
-  <!-- 本編 -->
-  <div id="mainContent">
-    <!-- シーン1: 新郎新婦紹介 -->
-    <div class="scene">
-      <div class="scene-title">▶ ふたりについて</div>
-      <div class="scene-text">
-        <div style="margin-bottom: 12px;">二人の結婚をお祝いいただきありがとうございます。</div>
-        <div class="couple-intro">
-          <div class="couple-card">
-            <div class="couple-emoji">👰</div>
-            <div class="couple-name">池江彩花</div>
-            <div class="couple-kana">いけえ さやか</div>
-            <div style="color: #00ff00; font-size: 0.8rem; margin-top: 4px;">新婦</div>
-          </div>
-          <div class="couple-card">
-            <div class="couple-emoji">🤵</div>
-            <div class="couple-name">原智也</div>
-            <div class="couple-kana">はら ともや</div>
-            <div style="color: #00ff00; font-size: 0.8rem; margin-top: 4px;">新郎</div>
-          </div>
-        </div>
-        <div style="margin-top: 12px; line-height: 1.9;">
-          ふたりはこれまでの感謝を込めて、日々支えてくださった皆さまをお招きし、結婚式を執り行います。
-          <br><br>
-          あたたかい笑顔とともに、幸せなひとときを分かち合えたら嬉しいです。
+  <!-- ================================================
+       トランジション画面（RPGロード演出）
+       ================================================ -->
+  <div id="transition-screen">
+    <div class="transition-inner">
+      <p class="transition-title">✦ LOADING ADVENTURE ✦</p>
+      <div class="loading-bar-wrap">
+        <div class="loading-bar">
+          <div class="loading-fill" id="loading-fill"></div>
         </div>
       </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- シーン2: 式情報 -->
-    <div class="scene">
-      <div class="scene-title">▶ 式情報</div>
-      <div class="scene-text">
-        <div class="info-grid">
-          <div class="info-item">
-            <div class="info-label">日付</div>
-            <div class="info-value">2026年11月2日（月）</div>
-          </div>
-          <div class="info-item">
-            <div class="info-label">時間</div>
-            <div class="info-value">開場 14:00 / 開式 15:00</div>
-          </div>
-          <div class="info-item">
-            <div class="info-label">会場</div>
-            <div class="info-value">広島県 宮島</div>
-          </div>
-          <div class="info-item">
-            <div class="info-label">住所</div>
-            <div class="info-value">広島県廿日市市宮島町</div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="divider"></div>
-
-    <!-- シーン3: 返信 -->
-    <div class="scene">
-      <div class="scene-title">▶ ご返信</div>
-      <div class="scene-text">
-        <div style="margin-bottom: 12px;">
-          お手数ですが、下記のボタンより
-          <br>ご出欠をお知らせください。
-        </div>
-        <div style="color: #00ffff; font-size: 0.9rem; margin: 12px 0;">
-          ★ Googleフォームで返信 ★
-        </div>
-      </div>
-      <div class="buttons-container">
-        <button class="action-btn" onclick="openRSVP()">出欠を返信</button>
-        <button class="action-btn secondary" onclick="backToTitle()">タイトルに戻る</button>
-      </div>
+      <p class="loading-text" id="loading-text">Now Loading...</p>
     </div>
   </div>
 
-  <script>
-    function startGame() {
-      const titleScreen = document.getElementById('titleScreen');
-      const mainContent = document.getElementById('mainContent');
-      
-      titleScreen.style.display = 'none';
-      mainContent.style.display = 'block';
-      
-      // スクロール位置をリセット
-      window.scrollTo(0, 0);
-    }
+  <!-- ================================================
+       メインコンテンツ
+       ================================================ -->
+  <main id="main-content">
 
-    function backToTitle() {
-      const titleScreen = document.getElementById('titleScreen');
-      const mainContent = document.getElementById('mainContent');
-      
-      mainContent.style.display = 'none';
-      titleScreen.style.display = 'flex';
-      
-      // スクロール位置をリセット
-      window.scrollTo(0, 0);
-    }
+    <!-- ────────────────────────────────
+         ヒーローセクション（宮島ピクセルアート）
+         ──────────────────────────────── -->
+    <section id="hero">
+      <!-- 空・夕焼けグラデーション -->
+      <div class="hero-sky" id="parallax-sky"></div>
 
-    function openRSVP() {
-      // Googleフォームの仮のURL（実際のURLに置き換える）
-      const googleFormURL = 'https://docs.google.com/forms/d/e/YOUR_FORM_ID/viewform';
-      window.open(googleFormURL, '_blank');
-    }
-  </script>
+      <!-- 星（キャンバス） -->
+      <canvas id="stars-canvas"></canvas>
+
+      <!-- 雲 -->
+      <div class="clouds-layer" id="clouds-layer">
+        <div class="cloud c1"></div>
+        <div class="cloud c2"></div>
+        <div class="cloud c3"></div>
+        <div class="cloud c4"></div>
+      </div>
+
+      <!-- 山 -->
+      <div class="mountains-layer" id="mountains-layer">
+        <div class="mt mt-b1"></div>
+        <div class="mt mt-b2"></div>
+        <div class="mt mt-b3"></div>
+        <div class="mt mt-f1"></div>
+        <div class="mt mt-f2"></div>
+      </div>
+
+      <!-- 大鳥居 -->
+      <div class="torii-wrap">
+        <div class="torii">
+          <div class="torii-kasagi"></div>
+          <div class="torii-nuki-top"></div>
+          <div class="torii-nuki-bot"></div>
+          <div class="torii-hashira left"></div>
+          <div class="torii-hashira right"></div>
+        </div>
+      </div>
+
+      <!-- 海・波（キャンバス） -->
+      <canvas id="ocean-canvas"></canvas>
+
+      <!-- タイトル -->
+      <div class="hero-title-box reveal-hero">
+        <h1 class="hero-main-title">TOMOYA &amp; SAYAKA</h1>
+        <p class="hero-sub-title">✦ Wedding Invitation ✦</p>
+        <div class="hero-date-block">
+          <!-- ============================================
+               日付・場所の変更はここ
+               ============================================ -->
+          <p class="hero-date">202X.XX.XX</p>
+          <p class="hero-location">Miyajima, Hiroshima</p>
+          <!-- ============================================ -->
+        </div>
+      </div>
+
+      <!-- スクロール誘導 -->
+      <div class="scroll-hint">
+        <span class="scroll-arr">▼</span>
+        <span class="scroll-lbl">SCROLL</span>
+      </div>
+    </section>
+
+    <!-- ────────────────────────────────
+         キャラクターステータスセクション
+         ──────────────────────────────── -->
+    <section id="characters" class="content-section">
+      <div class="sec-header scroll-reveal">
+        <h2 class="sec-title">＊ PARTY MEMBERS ＊</h2>
+      </div>
+      <div class="chars-container">
+
+        <!-- 新郎 -->
+        <div class="char-card scroll-reveal">
+          <div class="rpg-window">
+            <div class="rpg-window-bar">GROOM STATUS</div>
+            <div class="char-sprite-area">
+              <canvas id="groom-canvas" class="char-canvas" width="56" height="80"></canvas>
+              <div class="char-sparkle-ring"></div>
+            </div>
+            <div class="char-stats">
+              <div class="stat-row">
+                <span class="sn">NAME</span>
+                <span class="sv">TOMOYA</span>
+              </div>
+              <div class="stat-row kanji-row">
+                <span class="sn"></span>
+                <span class="sv kanji">原　智也</span>
+              </div>
+              <div class="stat-row kana-row">
+                <span class="sv kana">（はら ともや）</span>
+              </div>
+              <div class="stat-sep">────────────</div>
+              <div class="stat-row">
+                <span class="sn">Lv.</span>
+                <span class="sv">25</span>
+              </div>
+              <div class="stat-row">
+                <span class="sn">JOB</span>
+                <span class="sv">GROOM</span>
+              </div>
+              <div class="stat-row">
+                <span class="sn">BORN</span>
+                <span class="sv">2000.03.12</span>
+              </div>
+              <div class="stat-row">
+                <span class="sn">FROM</span>
+                <span class="sv">HIROSHIMA</span>
+              </div>
+              <div class="stat-sep">────────────</div>
+              <div class="stat-row exp-row">
+                <span class="sn">HP</span>
+                <div class="stat-bar"><div class="stat-bar-fill hp" style="width:92%"></div></div>
+              </div>
+              <div class="stat-row exp-row">
+                <span class="sn">MP</span>
+                <div class="stat-bar"><div class="stat-bar-fill mp" style="width:75%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ハート -->
+        <div class="vs-wrap">
+          <div class="heart-anim">♥</div>
+          <div class="vs-deco">×</div>
+        </div>
+
+        <!-- 新婦 -->
+        <div class="char-card scroll-reveal">
+          <div class="rpg-window">
+            <div class="rpg-window-bar">BRIDE STATUS</div>
+            <div class="char-sprite-area">
+              <canvas id="bride-canvas" class="char-canvas" width="56" height="80"></canvas>
+              <div class="char-sparkle-ring"></div>
+            </div>
+            <div class="char-stats">
+              <div class="stat-row">
+                <span class="sn">NAME</span>
+                <span class="sv">SAYAKA</span>
+              </div>
+              <div class="stat-row kanji-row">
+                <span class="sn"></span>
+                <span class="sv kanji">池江　彩花</span>
+              </div>
+              <div class="stat-row kana-row">
+                <span class="sv kana">（いけえ さやか）</span>
+              </div>
+              <div class="stat-sep">────────────</div>
+              <div class="stat-row">
+                <span class="sn">Lv.</span>
+                <span class="sv">27</span>
+              </div>
+              <div class="stat-row">
+                <span class="sn">JOB</span>
+                <span class="sv">BRIDE</span>
+              </div>
+              <div class="stat-row">
+                <span class="sn">BORN</span>
+                <span class="sv">1998.09.19</span>
+              </div>
+              <div class="stat-row">
+                <span class="sn">FROM</span>
+                <span class="sv">KAGOSHIMA</span>
+              </div>
+              <div class="stat-sep">────────────</div>
+              <div class="stat-row exp-row">
+                <span class="sn">HP</span>
+                <div class="stat-bar"><div class="stat-bar-fill hp" style="width:98%"></div></div>
+              </div>
+              <div class="stat-row exp-row">
+                <span class="sn">MP</span>
+                <div class="stat-bar"><div class="stat-bar-fill mp" style="width:88%"></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ────────────────────────────────
+         メッセージセクション
+         ──────────────────────────────── -->
+    <section id="message" class="content-section">
+      <div class="sec-header scroll-reveal">
+        <h2 class="sec-title">＊ MESSAGE ＊</h2>
+      </div>
+      <div class="msg-window scroll-reveal" id="msg-window">
+        <div class="msg-window-deco top-left">╔</div>
+        <div class="msg-window-deco top-right">╗</div>
+        <div class="msg-window-deco bot-left">╚</div>
+        <div class="msg-window-deco bot-right">╝</div>
+        <div class="msg-inner">
+          <div id="typing-text" class="typing-text"></div>
+          <span class="msg-cursor" id="msg-cursor">▼</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ────────────────────────────────
+         当日案内セクション
+         ──────────────────────────────── -->
+    <section id="schedule" class="content-section">
+      <div class="sec-header scroll-reveal">
+        <h2 class="sec-title">＊ DAY SCHEDULE ＊</h2>
+      </div>
+      <div class="sched-wrap scroll-reveal">
+        <div class="rpg-window sched-window">
+          <div class="rpg-window-bar">WEDDING DAY INFO</div>
+          <div class="sched-body">
+            <div class="sched-item">
+              <div class="sched-icon">🏰</div>
+              <div class="sched-info">
+                <div class="sched-time">13:00</div>
+                <div class="sched-label">開　場</div>
+              </div>
+            </div>
+            <div class="sched-connector">│<br>│<br>│</div>
+            <div class="sched-item">
+              <div class="sched-icon">💍</div>
+              <div class="sched-info">
+                <div class="sched-time">14:00</div>
+                <div class="sched-label">開　始</div>
+              </div>
+            </div>
+          </div>
+          <div class="sched-location">
+            <div class="sched-loc-label">集合場所</div>
+            <!-- ============================================
+                 集合場所の変更はここ
+                 ============================================ -->
+            <div class="sched-loc-value">（後日ご案内）</div>
+            <!-- ============================================ -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ────────────────────────────────
+         マップセクション
+         ──────────────────────────────── -->
+    <section id="map" class="content-section">
+      <div class="sec-header scroll-reveal">
+        <h2 class="sec-title">＊ WORLD MAP ＊</h2>
+      </div>
+      <div class="map-wrap scroll-reveal">
+        <!--
+          ============================================================
+          Googleマップを追加する場合はここに貼り付け
+          <iframe
+            src="https://www.google.com/maps/embed?pb=..."
+            width="100%" height="400" style="border:0;"
+            allowfullscreen="" loading="lazy">
+          </iframe>
+          ============================================================
+        -->
+        <div class="map-coming-soon" id="map-placeholder">
+          <canvas id="map-pixel-canvas" width="320" height="200"></canvas>
+          <div class="map-text-block">
+            <p class="map-label">MAP</p>
+            <p class="map-blink">COMING SOON...</p>
+            <div class="map-dots">
+              <span>·</span><span>·</span><span>·</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ────────────────────────────────
+         出欠回答セクション
+         ──────────────────────────────── -->
+    <section id="rsvp" class="content-section">
+      <div class="sec-header scroll-reveal">
+        <h2 class="sec-title">＊ YOUR CHOICE ＊</h2>
+      </div>
+      <div class="rsvp-wrap scroll-reveal">
+        <div class="rsvp-msg-window">
+          <p class="rsvp-q">出席しますか？</p>
+          <p class="rsvp-hint">ご回答をお願いいたします</p>
+        </div>
+        <!-- ============================================
+             出欠回答URLの変更は script.js の
+             RSVP_URL 定数を編集してください
+             ============================================ -->
+        <a href="#" id="rsvp-button" class="rsvp-btn" onclick="handleRsvpClick(event)">
+          <span class="rsvp-cur">▶</span>出欠を回答する
+        </a>
+        <!-- ============================================ -->
+      </div>
+    </section>
+
+    <!-- ────────────────────────────────
+         フッター
+         ──────────────────────────────── -->
+    <footer id="footer">
+      <div class="footer-inner">
+        <div class="footer-deco">
+          <span>★</span><span>☆</span><span>✦</span><span>☆</span><span>★</span>
+        </div>
+        <p class="footer-main">Thank you for joining our adventure.</p>
+        <p class="footer-names">Tomoya &amp; Sayaka</p>
+        <div class="footer-hearts">
+          <span>♥</span><span>♡</span><span>♥</span><span>♡</span><span>♥</span>
+        </div>
+        <p class="footer-end">✦ ∼ END ∼ ✦</p>
+        <p class="footer-copy">2026 — A Pixel Adventure</p>
+      </div>
+    </footer>
+
+  </main><!-- /#main-content -->
+
+  <script src="script.js"></script>
 </body>
 </html>
