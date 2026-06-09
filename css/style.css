@@ -1,0 +1,835 @@
+/* ===================================================
+   PIXEL MIYAJIMA WEDDING - Main Stylesheet
+   =================================================== */
+
+/* --------- Google Fonts (ドット風フォント) --------- */
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&family=Noto+Sans+JP:wght@400;700&display=swap');
+
+/* --------- CSS Variables --------- */
+:root {
+  --bg-dark:     #0d0a1a;
+  --bg-mid:      #1a1433;
+  --bg-light:    #2a2050;
+  --pixel-red:   #e8324a;
+  --pixel-gold:  #f5c842;
+  --pixel-cyan:  #4af5e8;
+  --pixel-green: #4af58a;
+  --pixel-blue:  #4a8af5;
+  --pixel-white: #f0ede8;
+  --pixel-gray:  #8888a0;
+  --torii-red:   #cc2200;
+  --torii-dark:  #882200;
+  --sea-blue:    #1a4a8a;
+  --sea-light:   #2a6aaa;
+  --window-bg:   #0a0818;
+  --border-col:  #f5c842;
+  --font-pixel:  'DotGothic16', monospace;
+  --font-body:   'Noto Sans JP', sans-serif;
+}
+
+/* --------- Reset & Base --------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  background: var(--bg-dark);
+  color: var(--pixel-white);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  cursor: default;
+}
+
+a { text-decoration: none; color: inherit; }
+canvas { display: block; }
+
+/* --------- Pixel Text --------- */
+.pixel-text {
+  font-family: var(--font-pixel);
+  letter-spacing: 0.05em;
+  image-rendering: pixelated;
+}
+
+/* --------- Pixel Border --------- */
+.pixel-border {
+  border: 3px solid var(--border-col);
+  box-shadow:
+    0 0 0 1px var(--bg-dark),
+    inset 0 0 0 1px var(--bg-dark),
+    4px 4px 0 var(--torii-dark),
+    0 0 20px rgba(245,200,66,0.2);
+  position: relative;
+}
+
+.pixel-border::before,
+.pixel-border::after {
+  content: '';
+  position: absolute;
+  width: 8px; height: 8px;
+  background: var(--border-col);
+  z-index: 2;
+}
+.pixel-border::before { top: -4px; left: -4px; }
+.pixel-border::after  { top: -4px; right: -4px; }
+
+/* =============================================
+   OPENING SCREEN
+   ============================================= */
+#opening-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-dark);
+  transition: opacity 0.8s ease;
+}
+
+#opening-screen.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.opening-bg {
+  position: absolute;
+  inset: 0;
+}
+
+#opening-stars {
+  width: 100%; height: 100%;
+}
+
+.opening-content {
+  position: relative;
+  z-index: 10;
+  width: 90%;
+  max-width: 520px;
+  text-align: center;
+}
+
+.opening-box {
+  background: rgba(10,8,24,0.92);
+  padding: 40px 32px 36px;
+  border-radius: 2px;
+}
+
+.opening-subtitle {
+  font-family: var(--font-pixel);
+  font-size: 0.75rem;
+  color: var(--pixel-cyan);
+  letter-spacing: 0.2em;
+  margin-bottom: 20px;
+  opacity: 0.8;
+}
+
+.opening-text {
+  font-family: var(--font-pixel);
+  font-size: clamp(1rem, 4vw, 1.4rem);
+  color: var(--pixel-gold);
+  line-height: 1.9;
+  min-height: 3em;
+  text-shadow: 0 0 12px rgba(245,200,66,0.6);
+}
+
+.opening-cursor {
+  font-family: var(--font-pixel);
+  color: var(--pixel-gold);
+  animation: blink 0.7s step-end infinite;
+  font-size: 1rem;
+}
+
+/* --------- スパークル --------- */
+.sparkle-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.sparkle {
+  position: absolute;
+  width: 6px; height: 6px;
+  background: var(--pixel-gold);
+  animation: sparkle-float 2s ease-in-out infinite;
+  image-rendering: pixelated;
+}
+
+.sparkle::before {
+  content: '✦';
+  position: absolute;
+  font-size: 8px;
+  color: var(--pixel-gold);
+  top: -2px; left: -2px;
+}
+
+@keyframes sparkle-float {
+  0%   { opacity: 0; transform: translateY(0) scale(0); }
+  30%  { opacity: 1; transform: translateY(-10px) scale(1); }
+  70%  { opacity: 0.7; }
+  100% { opacity: 0; transform: translateY(-30px) scale(0.3); }
+}
+
+/* --------- RPGボタン --------- */
+.rpg-btn {
+  display: inline-block;
+  background: var(--bg-dark);
+  color: var(--pixel-gold);
+  font-family: var(--font-pixel);
+  font-size: clamp(0.85rem, 3vw, 1rem);
+  border: 2px solid var(--border-col);
+  padding: 12px 28px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.1s;
+  box-shadow: 3px 3px 0 var(--torii-dark);
+  letter-spacing: 0.05em;
+  margin-top: 12px;
+}
+
+.rpg-btn:hover {
+  background: var(--pixel-gold);
+  color: var(--bg-dark);
+  box-shadow: 1px 1px 0 var(--torii-dark);
+  transform: translate(2px, 2px);
+}
+
+.rpg-btn:active {
+  box-shadow: none;
+  transform: translate(3px, 3px);
+}
+
+.open-btn {
+  animation: btn-appear 0.5s ease forwards;
+  font-size: clamp(0.9rem, 4vw, 1.1rem);
+  padding: 14px 32px;
+}
+
+@keyframes btn-appear {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* =============================================
+   HERO SECTION
+   ============================================= */
+#hero {
+  position: relative;
+  height: 100svh;
+  min-height: 500px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#world-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-overlay {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+}
+
+.hero-title-box {
+  background: rgba(10,8,24,0.82);
+  padding: 24px 36px;
+  display: inline-block;
+  backdrop-filter: blur(2px);
+}
+
+.hero-subtitle {
+  font-size: 0.7rem;
+  color: var(--pixel-cyan);
+  letter-spacing: 0.3em;
+  margin-bottom: 8px;
+}
+
+.hero-title {
+  font-family: var(--font-pixel);
+  font-size: clamp(1.4rem, 6vw, 2.4rem);
+  color: var(--pixel-gold);
+  text-shadow: 0 0 20px rgba(245,200,66,0.8);
+  margin-bottom: 8px;
+}
+
+.hero-title .amp {
+  color: var(--pixel-red);
+  font-size: 0.8em;
+  padding: 0 0.3em;
+}
+
+.hero-date {
+  font-size: clamp(0.75rem, 2.5vw, 0.95rem);
+  color: var(--pixel-white);
+  letter-spacing: 0.2em;
+}
+
+.scroll-hint {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.scroll-hint .pixel-text {
+  font-size: 0.7rem;
+  color: var(--pixel-cyan);
+  letter-spacing: 0.2em;
+}
+
+/* =============================================
+   RPG SECTIONS (共通)
+   ============================================= */
+.rpg-section {
+  padding: 60px 16px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.section-header {
+  text-align: center;
+  padding: 16px 32px;
+  background: var(--window-bg);
+  margin-bottom: 40px;
+  display: inline-block;
+  left: 50%;
+  transform: translateX(-50%);
+  position: relative;
+}
+
+.section-title {
+  font-size: clamp(0.9rem, 3vw, 1.2rem);
+  color: var(--pixel-gold);
+  letter-spacing: 0.15em;
+}
+
+/* =============================================
+   PROFILES
+   ============================================= */
+#profiles {
+  padding-top: 80px;
+}
+
+.profiles-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.profile-card {
+  background: var(--window-bg);
+  padding: 24px 20px;
+  width: clamp(260px, 40vw, 340px);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  opacity: 0;
+  transform: translateX(-40px);
+  transition: all 0.6s ease;
+}
+
+.profile-card.slide-in-right {
+  transform: translateX(40px);
+}
+
+.profile-card.visible {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.character-sprite-wrap {
+  text-align: center;
+  position: relative;
+}
+
+.character-canvas {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  width: 80px;
+  height: 120px;
+  margin: 0 auto;
+}
+
+.sprite-shadow {
+  width: 40px;
+  height: 8px;
+  background: radial-gradient(ellipse, rgba(0,0,0,0.5), transparent 70%);
+  margin: 4px auto 0;
+  border-radius: 50%;
+}
+
+.profile-name-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.profile-name {
+  font-size: 1.3rem;
+  color: var(--pixel-gold);
+}
+
+.profile-kana {
+  font-size: 0.7rem;
+  color: var(--pixel-gray);
+}
+
+.rpg-stats {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 10px;
+}
+
+.rpg-stats td {
+  font-family: var(--font-pixel);
+  font-size: clamp(0.65rem, 2vw, 0.8rem);
+  padding: 3px 6px;
+  border-bottom: 1px solid rgba(245,200,66,0.15);
+}
+
+.stat-label {
+  color: var(--pixel-cyan);
+  width: 56px;
+  letter-spacing: 0.05em;
+}
+
+.stat-val {
+  color: var(--pixel-white);
+}
+
+.rpg-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.bar-label {
+  font-size: 0.65rem;
+  color: var(--pixel-cyan);
+  width: 20px;
+}
+
+.rpg-bar {
+  flex: 1;
+  height: 8px;
+  background: #1a1433;
+  border: 1px solid var(--pixel-gray);
+  overflow: hidden;
+}
+
+.rpg-bar-fill {
+  height: 100%;
+  background: var(--pixel-green);
+  animation: bar-fill 1.5s ease forwards;
+  width: 0;
+}
+
+.hp-fill  { --bar-w: 92%; background: var(--pixel-green); }
+.mp-fill  { --bar-w: 78%; background: var(--pixel-blue); }
+.hp-fill2 { --bar-w: 88%; }
+.mp-fill2 { --bar-w: 95%; }
+
+@keyframes bar-fill {
+  to { width: var(--bar-w, 80%); }
+}
+
+.vs-badge {
+  font-size: 1.6rem;
+  color: var(--pixel-red);
+  text-align: center;
+  align-self: center;
+  text-shadow: 0 0 10px rgba(232,50,74,0.7);
+  letter-spacing: 0.1em;
+}
+
+.vs-sub {
+  font-size: 0.55rem;
+  color: var(--pixel-gold);
+  display: block;
+  margin-top: 4px;
+  letter-spacing: 0.1em;
+}
+
+/* =============================================
+   MESSAGE WINDOW
+   ============================================= */
+.message-section {
+  padding: 40px 16px 80px;
+}
+
+.message-window {
+  max-width: 700px;
+  margin: 0 auto;
+  background: var(--window-bg);
+  overflow: hidden;
+}
+
+.message-window-header {
+  background: var(--bg-mid);
+  padding: 8px 20px;
+  font-size: 0.75rem;
+  color: var(--pixel-gold);
+  border-bottom: 2px solid var(--border-col);
+  letter-spacing: 0.2em;
+}
+
+.message-body {
+  padding: 28px 32px;
+  min-height: 160px;
+}
+
+.message-text {
+  font-size: clamp(0.85rem, 2.8vw, 1rem);
+  color: var(--pixel-white);
+  line-height: 2.2;
+  white-space: pre-wrap;
+}
+
+.msg-cursor {
+  color: var(--pixel-white);
+  font-family: var(--font-pixel);
+}
+
+/* =============================================
+   TORII SECTION
+   ============================================= */
+.torii-section {
+  position: relative;
+  height: clamp(400px, 70vw, 700px);
+  overflow: hidden;
+  padding: 0;
+  max-width: 100%;
+}
+
+#torii-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.torii-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 32px;
+  z-index: 10;
+}
+
+.torii-text-box {
+  background: rgba(10,8,24,0.85);
+  padding: 12px 28px;
+  text-align: center;
+}
+
+.torii-caption {
+  font-size: 0.95rem;
+  color: var(--pixel-gold);
+  letter-spacing: 0.15em;
+}
+
+.torii-sub {
+  font-size: 0.65rem;
+  color: var(--pixel-gray);
+  letter-spacing: 0.2em;
+  margin-top: 4px;
+}
+
+/* =============================================
+   WEDDING INFO
+   ============================================= */
+#wedding-info {
+  padding-top: 80px;
+}
+
+.info-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+}
+
+.info-card {
+  background: var(--window-bg);
+  padding: 28px 24px;
+  width: clamp(240px, 40vw, 320px);
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s ease;
+}
+
+.info-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.info-icon {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.info-label {
+  font-size: 0.7rem;
+  color: var(--pixel-cyan);
+  letter-spacing: 0.2em;
+  margin-bottom: 14px;
+}
+
+.info-main {
+  font-size: clamp(0.85rem, 2.8vw, 1rem);
+  color: var(--pixel-gold);
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+.info-table {
+  font-family: var(--font-pixel);
+  font-size: 0.8rem;
+  border-collapse: collapse;
+  margin: 0 auto;
+  color: var(--pixel-white);
+}
+
+.info-table td {
+  padding: 3px 12px;
+}
+
+.map-btn {
+  font-size: 0.8rem;
+  padding: 8px 20px;
+  margin-top: 12px;
+}
+
+/* =============================================
+   COUNTDOWN
+   ============================================= */
+.countdown-section {
+  text-align: center;
+  padding-top: 80px;
+}
+
+.countdown-subtitle {
+  font-size: 0.75rem;
+  color: var(--pixel-gray);
+  margin-top: 4px;
+  letter-spacing: 0.1em;
+}
+
+.countdown-display {
+  background: var(--window-bg);
+  padding: 32px 20px;
+  max-width: 640px;
+  margin: 0 auto;
+  margin-top: 8px;
+}
+
+.countdown-grid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(4px, 2vw, 16px);
+  flex-wrap: nowrap;
+}
+
+.countdown-item {
+  text-align: center;
+  min-width: clamp(48px, 15vw, 100px);
+}
+
+.countdown-num {
+  font-size: clamp(1.8rem, 7vw, 3.2rem);
+  color: var(--pixel-gold);
+  text-shadow: 0 0 16px rgba(245,200,66,0.6);
+  line-height: 1;
+  display: block;
+}
+
+.countdown-label {
+  font-size: clamp(0.6rem, 1.8vw, 0.8rem);
+  color: var(--pixel-cyan);
+  margin-top: 6px;
+  letter-spacing: 0.1em;
+}
+
+.countdown-sep {
+  font-size: clamp(1.4rem, 5vw, 2.4rem);
+  color: var(--pixel-gold);
+  opacity: 0.5;
+  line-height: 1;
+  padding-bottom: 16px;
+}
+
+/* =============================================
+   RSVP
+   ============================================= */
+.rsvp-section {
+  text-align: center;
+  padding-top: 80px;
+}
+
+.rsvp-box {
+  background: var(--window-bg);
+  padding: 40px 24px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.rsvp-text {
+  font-size: clamp(0.85rem, 3vw, 1rem);
+  color: var(--pixel-white);
+  line-height: 2;
+  margin-bottom: 28px;
+}
+
+.rsvp-btn {
+  font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+  padding: 16px 36px;
+  border-color: var(--pixel-cyan);
+  color: var(--pixel-cyan);
+  box-shadow: 3px 3px 0 #0a3a3a;
+}
+
+.rsvp-btn:hover {
+  background: var(--pixel-cyan);
+  color: var(--bg-dark);
+  box-shadow: 1px 1px 0 #0a3a3a;
+}
+
+/* =============================================
+   FOOTER
+   ============================================= */
+#footer {
+  text-align: center;
+  padding: 40px 16px;
+  color: var(--pixel-gray);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  border-top: 1px solid rgba(245,200,66,0.15);
+}
+
+.footer-sub {
+  margin-top: 6px;
+  color: var(--pixel-red);
+  opacity: 0.7;
+}
+
+/* =============================================
+   EASTER EGG: YUKI
+   ============================================= */
+#yuki-container {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  z-index: 500;
+  transition: opacity 0.3s, transform 0.3s;
+  pointer-events: none;
+}
+
+#yuki-container.yuki-hidden {
+  opacity: 0;
+  transform: translateX(120px);
+}
+
+#yuki-container.yuki-visible {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+#yuki-canvas {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  width: 96px;
+  height: 80px;
+}
+
+.yuki-bubble {
+  position: absolute;
+  top: -32px;
+  right: 0;
+  background: var(--window-bg);
+  color: var(--pixel-white);
+  font-size: 0.75rem;
+  padding: 4px 10px;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+}
+
+#easter-egg-zone {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 60px;
+  z-index: 400;
+  cursor: default;
+}
+
+/* =============================================
+   ANIMATIONS & UTILITIES
+   ============================================= */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0; }
+}
+
+.blink-text {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes float-up {
+  0%   { transform: translateY(0); }
+  50%  { transform: translateY(-8px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes pixel-shimmer {
+  0%, 100% { filter: brightness(1); }
+  50%       { filter: brightness(1.3) drop-shadow(0 0 4px var(--pixel-gold)); }
+}
+
+/* --------- Scroll fade-in --------- */
+.fade-in-card,
+.slide-in-left,
+.slide-in-right {
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+@media (max-width: 600px) {
+  .profiles-container { flex-direction: column; align-items: center; }
+  .vs-badge { transform: rotate(90deg); }
+  .info-cards { flex-direction: column; align-items: center; }
+  .countdown-grid { gap: 6px; }
+  .rpg-section { padding: 48px 12px; }
+  .opening-box { padding: 28px 16px 24px; }
+  .hero-title-box { padding: 16px 20px; }
+  .message-body { padding: 20px 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
