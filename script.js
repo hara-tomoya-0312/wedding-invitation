@@ -174,7 +174,9 @@ function startOpeningAnimation() {
 }
 
 function openInvitation() {
-  // Flash overlay
+  const btn = document.getElementById('open-btn');
+  if (btn) btn.disabled = true;
+
   const flash = document.createElement('div');
   flash.id = 'flash-overlay';
   document.body.appendChild(flash);
@@ -183,26 +185,136 @@ function openInvitation() {
     const overlay = document.getElementById('opening-overlay');
     overlay.classList.add('fade-out');
 
+    // main を opacity:0 で DOM に展開しておくことで canvas のサイズが確定する
     const main = document.getElementById('main-content');
     main.classList.remove('hidden');
     main.style.opacity = '0';
-    main.style.transition = 'opacity 0.8s ease';
-    setTimeout(() => { main.style.opacity = '1'; }, 50);
 
     setTimeout(() => {
       overlay.remove();
       flash.remove();
-    }, 900);
 
-    initTitleCanvas();
-    initStoryCanvas();
-    initCharacterSprites();
-    initCountdown();
-    initScrollReveal();
-    initParallax();
-    setCharacterLevels();
-    startStoryTyping();
+      showLoadingScreen(() => {
+        main.style.transition = 'opacity 0.8s ease';
+        setTimeout(() => { main.style.opacity = '1'; }, 50);
+      });
+    }, 900);
   }, 350);
+}
+
+// ===================================================
+//  LOADING SCREEN
+// ===================================================
+const LOADING_STEPS = [
+  { at: 0,    msg: '招待状を解読中...',              fn: null },
+  { at: 0.2,  msg: '宮島への道を開いています...',    fn: () => { initTitleCanvas(); initStoryCanvas(); } },
+  { at: 0.45, msg: '旅の仲間を呼び集めています...', fn: () => { initCharacterSprites(); setCharacterLevels(); } },
+  { at: 0.65, msg: '二人の物語を読み込み中...',      fn: () => { initCountdown(); } },
+  { at: 0.85, msg: '冒険の準備完了！',               fn: () => { initScrollReveal(); initParallax(); } },
+];
+
+function showLoadingScreen(onComplete) {
+  const loadingEl  = document.getElementById('loading-overlay');
+  const barFill    = document.getElementById('loading-bar-fill');
+  const percentEl  = document.getElementById('loading-percent');
+  const msgEl      = document.getElementById('loading-msg');
+  const dotsEl     = document.getElementById('loading-dots');
+  const canvas     = document.getElementById('loading-canvas');
+
+  loadingEl.classList.remove('hidden');
+
+  const cancelAnim = startLoadingCanvasAnim(canvas);
+
+  let dotsCount = 0;
+  const dotsTimer = setInterval(() => {
+    dotsCount = (dotsCount + 1) % 4;
+    dotsEl.textContent = '.'.repeat(dotsCount);
+  }, 400);
+
+  const DURATION = 2400;
+  const startTime = performance.now();
+  let stepIdx = 0;
+
+  function update(now) {
+    const elapsed  = now - startTime;
+    const progress = Math.min(elapsed / DURATION, 1);
+    const pct      = Math.floor(progress * 100);
+
+    barFill.style.width    = pct + '%';
+    percentEl.textContent  = pct + '%';
+
+    while (stepIdx < LOADING_STEPS.length && progress >= LOADING_STEPS[stepIdx].at) {
+      msgEl.textContent = LOADING_STEPS[stepIdx].msg;
+      if (LOADING_STEPS[stepIdx].fn) LOADING_STEPS[stepIdx].fn();
+      stepIdx++;
+    }
+
+    if (progress < 1) {
+      requestAnimationFrame(update);
+    } else {
+      clearInterval(dotsTimer);
+      if (cancelAnim) cancelAnim();
+
+      setTimeout(() => {
+        loadingEl.style.transition = 'opacity 0.5s ease';
+        loadingEl.style.opacity = '0';
+        setTimeout(() => {
+          loadingEl.classList.add('hidden');
+          loadingEl.style.opacity = '';
+          loadingEl.style.transition = '';
+          onComplete();
+        }, 500);
+      }, 300);
+    }
+  }
+
+  requestAnimationFrame(update);
+}
+
+function startLoadingCanvasAnim(canvas) {
+  if (!canvas) return null;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+  let animId;
+
+  function loop(ts) {
+    ctx.clearRect(0, 0, W, H);
+
+    // Sky gradient
+    const sky = ctx.createLinearGradient(0, 0, 0, H * 0.65);
+    sky.addColorStop(0,   C.skyTop);
+    sky.addColorStop(0.6, C.skyMid);
+    sky.addColorStop(1,   C.dawnOrange);
+    ctx.fillStyle = sky;
+    ctx.fillRect(0, 0, W, H * 0.65);
+
+    // Water
+    const wGrad = ctx.createLinearGradient(0, H * 0.6, 0, H);
+    wGrad.addColorStop(0, C.waterMid);
+    wGrad.addColorStop(1, C.waterDeep);
+    ctx.fillStyle = wGrad;
+    ctx.fillRect(0, H * 0.6, W, H * 0.4);
+
+    // Stars
+    for (let i = 0; i < 10; i++) {
+      const sx = ((i * 0.11 + ts * 0.00003) % 1.05) * W;
+      const sy = H * 0.06 + (i % 3) * 5;
+      const fa = 0.3 + 0.7 * Math.abs(Math.sin(ts * 0.002 + i * 1.1));
+      ctx.fillStyle = `rgba(255, 240, 200, ${fa})`;
+      ctx.fillRect(sx, sy, 2, 2);
+    }
+
+    // Mini torii (recordRect=false でクリック判定を汚染しない)
+    const pulse = 0.8 + 0.2 * Math.sin(ts * 0.0015);
+    ctx.save();
+    ctx.globalAlpha = pulse;
+    drawToriiGate(ctx, W * 0.5, H * 0.66, 1, ts, false);
+    ctx.restore();
+
+    animId = requestAnimationFrame(loop);
+  }
+  animId = requestAnimationFrame(loop);
+  return () => cancelAnimationFrame(animId);
 }
 
 // ===================================================
@@ -664,7 +776,7 @@ function renderStoryScene(canvas, t) {
   // Tomoya: start right, walk toward center
   const tomoyaX = W * 0.35 + Math.sin(t * walkSpeed) * 8;
   const sayakaX = W * 0.25 + Math.sin(t * walkSpeed + 0.3) * 8;
-  const charY = H - 42;
+  const charY = H - 142;
   const frame = Math.floor(t / 300) % 2;
 
   drawCharacterSprite(ctx, tomoyaX, charY, 'tomoya', frame, 2);
@@ -890,7 +1002,11 @@ function typeStoryLine(lineIndex) {
   if (textEl.dataset.typed) return;
   textEl.dataset.typed = '1';
   curEl.classList.remove('hidden');
-  typeText(textEl, STORY_LINES[lineIndex], 60, null);
+
+  const isLast = lineIndex >= STORY_LINES.length - 1;
+  typeText(textEl, STORY_LINES[lineIndex], 60, isLast ? null : () => {
+    setTimeout(() => typeStoryLine(lineIndex + 1), 800);
+  });
 }
 
 // ===================================================
@@ -957,10 +1073,10 @@ function initScrollReveal() {
         const delay = parseInt(entry.target.dataset.delay || '0');
         setTimeout(() => {
           entry.target.classList.add('revealed');
-          // ストーリーボックスのタイピング発火
+          // ストーリーボックスのタイピング発火（1行目のみ。2行目は1行目完了後に連鎖）
           const idx = Array.from(document.querySelectorAll('.story-box')).indexOf(entry.target);
-          if (idx >= 0) {
-            setTimeout(() => typeStoryLine(idx), 200);
+          if (idx === 0) {
+            setTimeout(() => typeStoryLine(0), 200);
           }
         }, delay);
         observer.unobserve(entry.target);
@@ -1024,7 +1140,7 @@ function triggerEasterEgg() {
 
   const textEl = overlay.querySelector('#easter-text');
   if (textEl) {
-    typeText(textEl, '！ ユキが\nあらわれた！', 80, () => {
+    typeText(textEl, 'ユキが\nあらわれた！', 80, () => {
       startYukiAnimation();
     });
   }
@@ -1034,6 +1150,27 @@ function closeEasterEgg() {
   const overlay = document.getElementById('easter-egg-overlay');
   if (overlay) overlay.classList.add('hidden');
 }
+
+// ===================================================
+//  HINT BUTTON — Tennis ball
+// ===================================================
+(function () {
+  const btn   = document.getElementById('hint-btn');
+  const toast = document.getElementById('hint-toast');
+  if (!btn || !toast) return;
+  let timer = null;
+
+  btn.addEventListener('click', () => {
+    toast.classList.remove('hidden');
+    if (timer) clearTimeout(timer);
+    timer = setTimeout(() => toast.classList.add('hidden'), 4500);
+  });
+
+  toast.addEventListener('click', () => {
+    if (timer) clearTimeout(timer);
+    toast.classList.add('hidden');
+  });
+}());
 
 let yukiAnimId = null;
 

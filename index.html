@@ -11,6 +11,23 @@
 </head>
 <body>
 
+  <!-- ===== Loading Screen ===== -->
+  <div id="loading-overlay" class="hidden">
+    <div class="loading-inner">
+      <canvas id="loading-canvas" width="180" height="100"></canvas>
+      <div class="loading-title-wrap">
+        <span class="loading-title">NOW LOADING</span><span id="loading-dots" class="loading-dots"></span>
+      </div>
+      <div class="loading-bar-wrap">
+        <div class="loading-bar">
+          <div id="loading-bar-fill" class="loading-bar-fill"></div>
+        </div>
+        <span id="loading-percent" class="loading-percent">0%</span>
+      </div>
+      <div id="loading-msg" class="loading-msg">冒険の準備中...</div>
+    </div>
+  </div>
+
   <!-- ===== Opening Overlay ===== -->
   <div id="opening-overlay">
     <div class="opening-inner">
@@ -38,13 +55,19 @@
         </div>
         <div class="scroll-hint blink-slow">▼ SCROLL DOWN ▼</div>
       </div>
+      <button id="hint-btn" class="hint-btn" aria-label="ヒントを見る">🍀</button>
+      <div id="hint-toast" class="hint-toast hidden">
+        <div class="rpg-message-box hint-msg-box">
+          <span class="hint-face">❓</span>
+          <p class="hint-text">なんか気になる鳥居が...<br>5回タップすると<br>何かが起こるかも！？</p>
+        </div>
+      </div>
     </section>
 
     <!-- Section 2: Story / Message -->
     <section id="story-section">
       <div class="pixel-grid-bg"></div>
       <div class="story-inner">
-        <canvas id="story-canvas" width="400" height="160"></canvas>
         <div class="story-messages">
           <div class="rpg-message-box story-box scroll-reveal" data-delay="0">
             <div class="message-face">💬</div>
@@ -98,14 +121,14 @@
                   <div class="stat-bar" data-value="100">
                     <div class="stat-bar-fill mp-fill" style="width:0%"></div>
                   </div>
-                  <span class="stat-val">80/80</span>
+                  <span class="stat-val">100/100</span>
                 </div>
               </div>
             </div>
           </div>
           <div class="status-footer">
             <div class="status-row2"><span class="label">CLASS</span><span class="value">広島の勇者</span></div>
-            <div class="status-row2"><span class="label">HOME</span><span class="value">広島県</span></div>
+            <div class="status-row2"><span class="label">FROM</span><span class="value">広島県</span></div>
             <div class="status-row2"><span class="label">BIRTHDAY</span><span class="value">2000.03.12</span></div>
             <div class="status-row2"><span class="label">FAV.FOOD</span><span class="value">さやかの手料理</span></div>
           </div>
@@ -144,14 +167,14 @@
                   <div class="stat-bar" data-value="100">
                     <div class="stat-bar-fill mp-fill" style="width:0%"></div>
                   </div>
-                  <span class="stat-val">100/100</span>
+                  <span class="stat-val">120/120</span>
                 </div>
               </div>
             </div>
           </div>
           <div class="status-footer">
             <div class="status-row2"><span class="label">CLASS</span><span class="value">鹿児島の魔法使い</span></div>
-            <div class="status-row2"><span class="label">HOME</span><span class="value">鹿児島県</span></div>
+            <div class="status-row2"><span class="label">FROM</span><span class="value">鹿児島県</span></div>
             <div class="status-row2"><span class="label">BIRTHDAY</span><span class="value">1998.09.19</span></div>
             <div class="status-row2"><span class="label">FAV.FOOD</span><span class="value">牡蠣</span></div>
           </div>
@@ -243,6 +266,14 @@
       </div>
     </section>
 
+    <!-- Section 6: Scene (character & torii animation) -->
+    <section id="scene-section">
+      <div class="pixel-grid-bg"></div>
+      <div class="scene-inner">
+        <canvas id="story-canvas" width="400" height="160"></canvas>
+      </div>
+    </section>
+
     <!-- Footer -->
     <footer>
       <p class="footer-text">TOMOYA &amp; SAYAKA</p>
@@ -263,7 +294,7 @@
       <canvas id="yuki-canvas" width="192" height="192"></canvas>
       <div class="rpg-message-box yuki-info-box">
         <p class="yuki-name">ユキ</p>
-        <p class="yuki-desc">新婦のご実家の<br>白い柴犬</p>
+        <p class="yuki-desc">新婦の実家の<br>白い柴犬</p>
       </div>
       <button class="rpg-button" onclick="closeEasterEgg()">▶ 閉じる</button>
     </div>
